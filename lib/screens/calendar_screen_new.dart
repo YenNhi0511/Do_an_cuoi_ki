@@ -182,21 +182,25 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       },
                       child: Container(
                         width: 60,
-                        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 8),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? const Color(0xFF14B8A6)
                               : const Color(0xFF2A2A2A),
                           borderRadius: BorderRadius.circular(12),
                           border: isToday
-                              ? Border.all(color: const Color(0xFF14B8A6), width: 2)
+                              ? Border.all(
+                                  color: const Color(0xFF14B8A6), width: 2)
                               : null,
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              DateFormat('EEE', 'vi').format(day).substring(0, 3),
+                              DateFormat('EEE', 'vi')
+                                  .format(day)
+                                  .substring(0, 3),
                               style: TextStyle(
                                 color: isSelected ? Colors.white : Colors.grey,
                                 fontSize: 12,
@@ -207,7 +211,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             Text(
                               day.day.toString(),
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white70,
+                                color:
+                                    isSelected ? Colors.white : Colors.white70,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -323,7 +328,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xFF0F766E), Color(0xFF14B8A6)],
+                                  colors: [
+                                    Color(0xFF0F766E),
+                                    Color(0xFF14B8A6)
+                                  ],
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -500,7 +508,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           final index = entry.key;
                           final task = entry.value;
                           final topPosition = (11.0 + index * 3) * 80;
-                          
+
                           return Positioned(
                             top: topPosition,
                             left: 12,
@@ -611,7 +619,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   // LIST VIEW
   Widget _buildListView() {
     final allTasks = _events.values.expand((tasks) => tasks).toList();
-    
+
     return Container(
       color: const Color(0xFF2A2A2A),
       child: allTasks.isEmpty
@@ -893,9 +901,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           alignment: Alignment.center,
           margin: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: isSelected
-                ? const Color(0xFF14B8A6)
-                : Colors.transparent,
+            color: isSelected ? const Color(0xFF14B8A6) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             boxShadow: isSelected
                 ? [
