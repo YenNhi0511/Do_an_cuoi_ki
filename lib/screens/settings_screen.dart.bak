@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
+
+// --- CHỈ CẦN IMPORT MÀN HÌNH LOGIN ---
+// (Hãy đảm bảo đường dẫn này đúng với dự án của bạn)
+import 'package:do_an_cuoi_ki/screens/login_screen.dart';
+import 'profile_screen.dart';
+// ------------------------------------
+
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Cài đặt")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.person_outline),
+              title: const Text("Thông tin cá nhân"),
+              subtitle: const Text("Xem và chỉnh sửa hồ sơ của bạn"),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+            ),
+            const Divider(),
+            SwitchListTile(
+              secondary: const Icon(Icons.dark_mode_outlined),
+              title: const Text("Chế độ tối"),
+              value: themeProvider.isDarkMode,
+              onChanged: (value) => themeProvider.toggleTheme(),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout_outlined),
+              title: const Text("Đăng xuất"),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Xác nhận đăng xuất"),
+                    content: const Text("Bạn có chắc muốn đăng xuất không?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("Huỷ")),
+                      TextButton(
+                        // --- SỬA LỖI TẠI ĐÂY ---
+                        onPressed: () {
+                          // Không cần async nữa
+
+                          // 1. Đóng hộp thoại
+                          Navigator.pop(context);
+
+                          // 2. Hiển thị thông báo
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Đã đăng xuất!")),
+                          );
+
+                          // 3. (Quan trọng) Điều hướng về Login và xoá hết màn hình cũ
+                          // (Sử dụng context.mounted để đảm bảo an toàn)
+                          if (context.mounted) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                              (Route<dynamic> route) => false,
+                            );
+                          }
+                        },
+                        // -------------------------
+                        child: const Text("Đăng xuất"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,55 @@
+name: do_an_cuoi_ki
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # === CÁC GÓI ĐƯỢC THÊM VÀO ĐỂ SỬA LỖI ===
+
+  # Dùng cho `main.dart` và `notification_service.dart`
+  intl: ^0.20.2 # <-- ĐÃ SỬA: Cập nhật phiên bản theo yêu cầu của SDK
+
+  # Dùng cho `auth_service.dart`, `api_service.dart`
+  http: ^1.2.1
+
+  # Dùng cho `auth_service.dart`, `theme_provider.dart`
+  shared_preferences: ^2.5.3
+
+  # Dùng cho `notification_service.dart`
+  flutter_local_notifications: ^17.2.1
+  timezone: ^0.9.4
+
+  # Dùng cho `calendar_screen.dart`
+  table_calendar: ^3.1.2
+
+  # Dùng cho `dashboard_screen.dart`
+  fl_chart: ^0.68.0
+
+  # Dùng cho `main.dart`, `settings_screen.dart`
+  provider: ^6.1.2
+
+  # Dùng cho `file_viewer.dart`
+  url_launcher: ^6.3.0
+  jwt_decode: ^0.3.1
+
+  # ==========================================
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
