@@ -28,11 +28,18 @@ router.post("/register", async (req, res) => {
     // ---
 
     const userExists = await User.findOne({ email: searchEmail });
+    console.log('🔍 Check user exists:', userExists ? 'YES' : 'NO');
+    
     if (userExists)
       return res.status(400).json({ message: "Email đã được sử dụng" });
 
+    console.log('➡️ Creating user:', { name, email: trimmedEmail });
+    
     // User model (trong User.js) sẽ tự động hash mật khẩu
     const user = await User.create({ name, email: trimmedEmail, password }); 
+    
+    console.log('✅ User created successfully:', user._id);
+    
     const token = generateToken(user._id);
     
     // Trả về token và user (không cần populate)

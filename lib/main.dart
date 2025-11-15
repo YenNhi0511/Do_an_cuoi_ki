@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 // --- THÊM CÁC IMPORT CÒN THIẾU ---
 import 'services/auth_service.dart';
+import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
 // ---------------------------------
 
@@ -21,6 +22,10 @@ import 'screens/activity_feed_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('vi_VN', null);
+
+  // Initialize notification service
+  final notificationService = NotificationService();
+  await notificationService.initNotification();
 
   // 1. Tạo AuthService TRƯỚC KHI chạy app
   final authService = AuthService();

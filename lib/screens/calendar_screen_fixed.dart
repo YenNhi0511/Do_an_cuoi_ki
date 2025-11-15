@@ -3,7 +3,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '../services/api_service.dart';
 import '../models/task.dart';
-import '../constants/app_colors.dart';
+import '../widgets/app_colors.dart';
 import 'task_form.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -30,8 +30,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   Future<void> _loadTasks() async {
     try {
-      final apiService = ApiService();
-      final tasks = await apiService.getTasks();
+      final tasks = await ApiService.getTasks();
       setState(() {
         _events = {};
         for (var task in tasks) {

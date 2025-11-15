@@ -1,10 +1,7 @@
 // lib/screens/task_form.dart - Redesigned theo hình 1-2
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../models/task.dart';
 import '../services/api_service.dart';
-import '../services/auth_service.dart';
-import '../widgets/tags_input.dart';
 
 class TaskFormScreen extends StatefulWidget {
   final Task? task;
@@ -35,14 +32,6 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   String _repeatType = 'Không lặp lại';
   Color _selectedColor = const Color(0xFF14B8A6);
   String _reminderTime = '15 phút trước';
-
-  final List<String> _repeatOptions = [
-    'Không lặp lại',
-    'Hàng ngày',
-    'Hàng tuần',
-    'Hàng tháng',
-    'Hàng năm',
-  ];
 
   final List<Color> _colorOptions = [
     Color(0xFF14B8A6), // Teal
@@ -83,26 +72,78 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   Future<void> _saveTask() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final authService = Provider.of<AuthService>(context, listen: false);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
+
+    // Convert dd/MM/yyyy to ISO string
+    String? deadlineIso;
+    try {
+      final parts = _startDateController.text.split('/');
+      if (parts.length == 3) {
+        final day = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+        final year = int.parse(parts[2]);
+        deadlineIso = DateTime(year, month, day).toIso8601String();
+      }
+    } catch (e) {
+      deadlineIso = null;
+    }
+
+    // Convert repeatType to backend format
+    String repeatTypeBackend = 'none';
+    switch (_repeatType) {
+      case 'Hàng ngày':
+        repeatTypeBackend = 'daily';
+        break;
+      case 'Hàng tuần':
+        repeatTypeBackend = 'weekly';
+        break;
+      case 'Hàng tháng':
+        repeatTypeBackend = 'monthly';
+        break;
+      case 'Hàng năm':
+        repeatTypeBackend = 'yearly';
+        break;
+    }
+
+    // Convert time format (05:16 CH -> 17:16)
+    String? convertTime(String timeStr) {
+      try {
+        final regex = RegExp(r'(\d{2}):(\d{2})\s*(SA|CH)');
+        final match = regex.firstMatch(timeStr);
+        if (match != null) {
+          int hour = int.parse(match.group(1)!);
+          final minute = match.group(2)!;
+          final period = match.group(3)!;
+
+          if (period == 'CH' && hour != 12) hour += 12;
+          if (period == 'SA' && hour == 12) hour = 0;
+
+          return '${hour.toString().padLeft(2, '0')}:$minute';
+        }
+      } catch (e) {
+        return null;
+      }
+      return null;
+    }
 
     final data = {
       'title': _titleController.text.trim(),
       'description': _descController.text.trim(),
       'category': _categoryController.text.trim(),
       'priority': _priorityController.text.trim(),
-      'deadline': _startDateController.text,
+      'deadline': deadlineIso,
       'tags': _tags,
-      'userId': authService.userId,
       'isAllDay': _isAllDay,
-      'repeatType': _repeatType,
-      'location': _locationController.text.trim(),
-      'hasReminder': _hasReminder,
-      'reminderTime': _reminderTime,
-      'startTime': _startTimeController.text,
-      'endTime': _endTimeController.text,
-      'color': _selectedColor.value.toRadixString(16),
+      'repeatType': repeatTypeBackend,
+      'location': _locationController.text.trim().isEmpty
+          ? null
+          : _locationController.text.trim(),
+      'reminders': _hasReminder ? [_reminderTime] : [],
+      'startTime': convertTime(_startTimeController.text),
+      'endTime': convertTime(_endTimeController.text),
+      'color':
+          '#${_selectedColor.value.toRadixString(16).padLeft(8, '0').substring(2)}',
     };
 
     try {

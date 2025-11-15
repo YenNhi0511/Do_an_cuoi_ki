@@ -31,10 +31,68 @@ const taskSchema = new mongoose.Schema(
       default: "Trung bình",
     },
 
-    // ⏰ Hạn chót
+    // ⏰ Hạn chốt
     deadline: {
       type: Date,
     },
+
+    // 🕒 Giờ bắt đầu
+    startTime: {
+      type: String,
+      trim: true,
+    },
+
+    // 🕛 Giờ kết thúc
+    endTime: {
+      type: String,
+      trim: true,
+    },
+
+    // 🌅 Cả ngày
+    isAllDay: {
+      type: Boolean,
+      default: false,
+    },
+
+    // 🔁 Lặp lại
+    repeatType: {
+      type: String,
+      enum: ["none", "daily", "weekly", "monthly", "yearly"],
+      default: "none",
+    },
+
+    // 🔔 Nhắc nhở
+    reminders: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
+    // 🎨 Màu sắc
+    color: {
+      type: String,
+      default: "#14B8A6",
+    },
+
+    // 📍 Địa điểm
+    location: {
+      type: String,
+      trim: true,
+    },
+
+    // 🔗 URL
+    url: {
+      type: String,
+      trim: true,
+    },
+
+    // 📎 File đính kèm
+    attachments: [
+      {
+        type: String,
+      },
+    ],
 
     // 📊 Trạng thái công việc
     status: {
